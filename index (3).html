@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G-Sport – Sport – Stad Ieper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:       #8b1a2b;
+      --red-dark:  #6e1220;
+      --teal:      #1e7d8e;
+      --pink-tile: #fce8ea;
+      --pink-hover:#f8d4d8;
+      --border:    #e0e0e0;
+      --text:      #1a1a1a;
+      --muted:     #555;
+      --bg:        #f5f5f5;
+      --white:     #ffffff;
+      --radius:    5px;
+    }
+    body { font-family:'Source Sans 3',sans-serif; font-size:16px; color:var(--text); background:var(--white); line-height:1.6; }
+
+    /* TOPBAR */
+    .topbar { background:var(--white); border-bottom:1px solid var(--border); padding:6px 0; }
+    .topbar-inner { max-width:1200px; margin:0 auto; padding:0 24px; display:flex; justify-content:flex-end; gap:10px; align-items:center; }
+    .tb-btn { display:flex; align-items:center; gap:6px; padding:6px 14px; font-size:13px; font-family:inherit; font-weight:600; border:none; cursor:pointer; border-radius:4px; text-decoration:none; }
+    .tb-aanmeld { background:transparent; color:var(--text); border:1px solid var(--border); }
+    .tb-hulp { background:var(--red); color:white; }
+    .tb-hulp:hover { background:var(--red-dark); }
+
+    /* HEADER */
+    header { background:var(--white); border-bottom:3px solid var(--red); padding:12px 0; }
+    .header-inner { max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; gap:16px; }
+    .logo { text-decoration:none; }
+    .logo-box { width:52px; height:52px; border:2.5px solid var(--red); border-radius:4px; display:flex; align-items:center; justify-content:center; }
+    .logo-box svg { width:32px; height:32px; }
+    .search-area { margin-left:auto; display:flex; gap:8px; align-items:center; }
+    .search-field { display:flex; align-items:center; border:1.5px solid var(--border); border-radius:4px; overflow:hidden; background:white; }
+    .search-field span { padding:0 10px; color:var(--red); font-size:15px; }
+    .search-field input { border:none; padding:9px 4px; font-size:14px; font-family:inherit; outline:none; color:var(--muted); width:220px; }
+    .btn-zoek { padding:9px 20px; background:var(--red); color:white; border:none; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; border-radius:4px; }
+    .btn-zoek:hover { background:var(--red-dark); }
+    .btn-menu { padding:9px 16px; background:var(--teal); color:white; border:none; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; border-radius:4px; display:flex; align-items:center; gap:6px; }
+
+    /* BREADCRUMB */
+    .bc { background:var(--bg); border-bottom:1px solid var(--border); padding:9px 0; font-size:13px; }
+    .bc-inner { max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; gap:6px; color:var(--muted); flex-wrap:wrap; }
+    .bc-inner a { color:var(--red); text-decoration:none; }
+    .bc-inner a:hover { text-decoration:underline; }
+
+    /* PAGE */
+    .page { max-width:1200px; margin:0 auto; padding:32px 24px 64px; }
+
+    /* IMAGE TILES */
+    .img-tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:18px; }
+    .img-tile { position:relative; border-radius:var(--radius); overflow:hidden; aspect-ratio:16/9; cursor:pointer; }
+    .tile-bg { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:52px; }
+    .tile-swim  { background:linear-gradient(135deg,#a8d8ea,#5ba8c8); }
+    .tile-gym   { background:linear-gradient(135deg,#b8d4a0,#6a9a48); }
+    .tile-gsport{ background:linear-gradient(135deg,#60c8a0,#1a8060); }
+    .tile-label { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.52); color:white; font-size:16px; font-weight:600; padding:10px 14px; }
+    .tile-badge { position:absolute; top:10px; left:10px; background:var(--red); color:white; font-size:11px; font-weight:700; padding:4px 10px; border-radius:3px; text-transform:uppercase; letter-spacing:.5px; }
+
+    /* LINK TILES */
+    .link-tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:44px; }
+    .lt { display:flex; align-items:center; gap:10px; padding:15px 18px; background:var(--pink-tile); border-radius:var(--radius); text-decoration:none; color:var(--text); font-size:15px; transition:background .15s; border:none; font-family:inherit; cursor:pointer; text-align:left; }
+    .lt:hover { background:var(--pink-hover); }
+    .lt .arr { color:var(--red); font-size:15px; font-weight:700; flex-shrink:0; }
+    .lt.active-tile { background:var(--red); color:white; }
+    .lt.active-tile .arr { color:white; }
+    .lt.active-tile:hover { background:var(--red-dark); }
+
+    /* SECTION */
+    .section-h { font-size:26px; font-weight:700; color:var(--red); margin-bottom:8px; }
+    .section-intro { font-size:15px; color:var(--muted); margin-bottom:26px; max-width:680px; }
+
+    /* SEARCH & FILTER */
+    .club-search { width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:var(--radius); font-size:14px; font-family:inherit; margin-bottom:16px; outline:none; transition:border-color .15s; }
+    .club-search:focus { border-color:var(--red); }
+    .filters { display:flex; gap:7px; flex-wrap:wrap; align-items:center; margin-bottom:18px; }
+    .fl { font-size:13px; font-weight:600; color:var(--muted); margin-right:4px; }
+    .fc { padding:5px 13px; border:1.5px solid var(--border); background:white; border-radius:20px; font-size:13px; font-family:inherit; color:var(--muted); cursor:pointer; transition:all .15s; }
+    .fc:hover { border-color:var(--red); color:var(--red); }
+    .fc.active { background:var(--red); color:white; border-color:var(--red); }
+    .result-count { font-size:14px; color:var(--muted); margin-bottom:18px; }
+    .result-count strong { color:var(--red); }
+
+    /* CLUBS */
+    .clubs { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; }
+    .card { background:white; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:box-shadow .15s, border-color .15s; }
+    .card:hover { box-shadow:0 3px 14px rgba(139,26,43,.12); border-color:#c8a0a4; }
+    .card-top { background:var(--red); padding:14px 16px; display:flex; align-items:center; gap:12px; }
+    .card-icon { width:42px; height:42px; background:rgba(255,255,255,.18); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+    .card-name { font-size:15px; font-weight:700; color:white; line-height:1.25; }
+    .card-sport { font-size:12px; color:rgba(255,255,255,.72); margin-top:2px; }
+    .card-body { padding:14px 16px; }
+    .tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; }
+    .tag { font-size:11px; font-weight:600; padding:3px 8px; border-radius:3px; }
+    .t-red    { background:#fce8ea; color:#8b1a2b; }
+    .t-teal   { background:#e0f2f4; color:#1a5f6b; }
+    .t-amber  { background:#fff3cc; color:#7a5200; }
+    .t-purple { background:#ede8fd; color:#3c2a8a; }
+    .card-info { list-style:none; font-size:13px; color:var(--muted); display:flex; flex-direction:column; gap:6px; padding-top:11px; border-top:1px solid var(--border); }
+    .card-info li { display:flex; gap:8px; align-items:flex-start; }
+    .card-info .ic { font-size:14px; flex-shrink:0; }
+    .btn-card { display:block; width:100%; margin-top:14px; padding:9px; text-align:center; background:white; color:var(--red); border:1.5px solid var(--red); border-radius:var(--radius); font-size:13px; font-family:inherit; font-weight:600; cursor:pointer; text-decoration:none; transition:all .15s; }
+    .btn-card:hover { background:var(--red); color:white; }
+    .no-res { text-align:center; padding:40px; color:var(--muted); background:var(--bg); border-radius:var(--radius); font-size:15px; }
+
+    /* INFO CARDS */
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:44px; }
+    .info-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); padding:18px; }
+    .info-card h3 { font-size:15px; font-weight:700; color:var(--red); margin-bottom:9px; }
+    .info-card p, .info-card a { font-size:13px; color:var(--muted); display:block; margin-bottom:4px; text-decoration:none; }
+    .info-card a:hover { color:var(--red); text-decoration:underline; }
+
+    /* NEWS */
+    .news { margin-top:48px; }
+    .news h2 { font-size:24px; font-weight:700; color:var(--red); margin-bottom:16px; }
+    .news-item { display:flex; gap:14px; padding:15px; border:1px solid var(--border); border-radius:var(--radius); background:white; margin-bottom:10px; align-items:flex-start; }
+    .news-badge { background:var(--red); color:white; font-size:11px; font-weight:700; padding:3px 10px; border-radius:3px; text-transform:uppercase; white-space:nowrap; flex-shrink:0; }
+    .news-title { font-size:15px; font-weight:600; margin-bottom:3px; }
+    .news-desc { font-size:13px; color:var(--muted); }
+
+    /* FOOTER */
+    footer { background:#181818; color:rgba(255,255,255,.6); padding:36px 24px 18px; margin-top:48px; font-size:13px; }
+    .foot-grid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:28px; margin-bottom:22px; }
+    .foot-col h4 { color:white; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; margin-bottom:9px; }
+    .foot-col a, .foot-col p { display:block; color:rgba(255,255,255,.55); text-decoration:none; margin-bottom:4px; }
+    .foot-col a:hover { color:white; }
+    .foot-bot { max-width:1200px; margin:0 auto; padding-top:14px; border-top:1px solid rgba(255,255,255,.1); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:12px; color:rgba(255,255,255,.3); }
+
+    @media(max-width:768px){
+      .img-tiles,.link-tiles,.clubs{ grid-template-columns:1fr; }
+      .search-area { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="tb-btn tb-aanmeld" href="#">📷 Aanmelden ▾</a>
+    <a class="tb-btn tb-hulp" href="#">Hulp nodig</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-box">
+        <!-- Simplified "Y" emblem like ieper.be -->
+        <svg viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="4" y="28" font-family="'Source Sans 3',sans-serif" font-size="28" font-weight="700" fill="#8b1a2b">Y</text>
+        </svg>
+      </div>
+    </a>
+    <div class="search-area">
+      <div class="search-field">
+        <span>🔍</span>
+        <input type="text" placeholder="Wat zoek je?">
+      </div>
+      <button class="btn-zoek">Zoeken</button>
+      <button class="btn-menu">☰ Menu</button>
+    </div>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="bc">
+  <div class="bc-inner">
+    <a href="#">Home</a><span>›</span>
+    <a href="#">Vrije tijd</a><span>›</span>
+    <a href="#">Sport</a><span>›</span>
+    <span>G-Sport</span>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- IMAGE TILES -->
+  <div class="img-tiles">
+    <div class="img-tile">
+      <div class="tile-bg tile-swim">🏊</div>
+      <div class="tile-label">Koop een zwemticket</div>
+    </div>
+    <div class="img-tile">
+      <div class="tile-bg tile-gym">🏋️</div>
+      <div class="tile-label">Reserveer een sportterrein</div>
+    </div>
+    <div class="img-tile">
+      <div class="tile-bg tile-gsport">♿</div>
+      <div class="tile-badge">Nieuw</div>
+      <div class="tile-label">G-Sport in Ieper</div>
+    </div>
+  </div>
+
+  <!-- LINK TILES -->
+  <div class="link-tiles">
+    <a class="lt" href="#"><span class="arr">›</span><span>Schrijf je in voor een sportactiviteit</span></a>
+    <a class="lt" href="#"><span class="arr">›</span><span>Sportaanbod</span></a>
+    <a class="lt" href="#"><span class="arr">›</span><span>Sportlocaties</span></a>
+    <a class="lt" href="#"><span class="arr">›</span><span>Sportevenementen en wedstrijden</span></a>
+    <a class="lt" href="#"><span class="arr">›</span><span>Sportverenigingen / sportraad</span></a>
+    <a class="lt active-tile" href="#"><span class="arr">›</span><span>G-Sport — clubs met G-afdeling</span></a>
+  </div>
+
+  <!-- SECTION TITLE -->
+  <h2 class="section-h">G-Sport in Ieper</h2>
+  <p class="section-intro">G-sport is de verzamelnaam voor sport door mensen met een fysieke, mentale of zintuiglijke beperking. Ontdek hieronder alle sportclubs in Ieper en deelgemeenten met een G-sport afdeling.</p>
+
+  <!-- FILTER & SEARCH -->
+  <input class="club-search" type="text" id="search-input" placeholder="Zoek op clubnaam of sporttak..." oninput="renderClubs()">
+  <div class="filters">
+    <span class="fl">Sporttak:</span>
+    <button class="fc active" onclick="setFilter('all',this)">Alle</button>
+    <button class="fc" onclick="setFilter('zwemmen',this)">Zwemmen</button>
+    <button class="fc" onclick="setFilter('voetbal',this)">Voetbal</button>
+    <button class="fc" onclick="setFilter('tennis',this)">Tennis</button>
+    <button class="fc" onclick="setFilter('kano',this)">Kano</button>
+    <button class="fc" onclick="setFilter('atletiek',this)">Atletiek</button>
+    <button class="fc" onclick="setFilter('turnen',this)">Turnen</button>
+    <button class="fc" onclick="setFilter('wielrennen',this)">Wielrennen</button>
+  </div>
+  <p class="result-count">Gevonden: <strong id="count-lbl">8 clubs</strong></p>
+
+  <div class="clubs" id="clubs-grid"></div>
+  <div class="no-res" id="no-res" style="display:none;">Geen clubs gevonden voor deze zoekopdracht.</div>
+
+  <!-- INFO CARDS -->
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>📞 Sportdienst Ieper</h3>
+      <p>Ter Waarde 1, 8900 Ieper</p>
+      <p>Tel: 057 451 600</p>
+      <a href="mailto:sportdienst@ieper.be">sportdienst@ieper.be</a>
+    </div>
+    <div class="info-card">
+      <h3>🔗 G-Sport Vlaanderen</h3>
+      <p>Kenniscentrum voor G-sport</p>
+      <a href="https://www.gsportvlaanderen.be" target="_blank">gsportvlaanderen.be</a>
+      <a href="https://www.gsportvlaanderen.be/club-zoeken" target="_blank">Zoek een club in jouw buurt</a>
+    </div>
+    <div class="info-card">
+      <h3>📄 G-Sportbrochure 2026</h3>
+      <p>West-Vlaanderen — overzicht per regio en sporttak.</p>
+      <a href="https://www.sport.vlaanderen/g-sport" target="_blank">Download via sport.vlaanderen</a>
+    </div>
+  </div>
+
+  <!-- NIEUWS -->
+  <div class="news">
+    <h2>Nieuws</h2>
+    <div class="news-item">
+      <span class="news-badge">G-Sport</span>
+      <div>
+        <div class="news-title">G-sport toegevoegd aan Gent-Wevelgem in Ieper</div>
+        <div class="news-desc">Renners met een beperking krijgen een eigen wedstrijd op de Grote Markt — een krachtig signaal van gelijkwaardigheid.</div>
+      </div>
+    </div>
+    <div class="news-item">
+      <span class="news-badge">Sportlessen</span>
+      <div>
+        <div class="news-title">MiniMaxiMove en MultiMove</div>
+        <div class="news-desc">Nog op zoek naar een sportles voor jouw peuter of kleuter? Schrijf je in voor het nieuwe seizoen.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>Stad Ieper</h4>
+      <p>Ter Waarde 1, 8900 Ieper</p>
+      <p>Tel: 057 451 600</p>
+      <a href="mailto:info@ieper.be">info@ieper.be</a>
+    </div>
+    <div class="foot-col">
+      <h4>Sport</h4>
+      <a href="#">Sportaanbod</a>
+      <a href="#">Sportlocaties</a>
+      <a href="#">G-Sport</a>
+      <a href="#">Sportkampen</a>
+    </div>
+    <div class="foot-col">
+      <h4>Nuttige links</h4>
+      <a href="https://www.gsportvlaanderen.be" target="_blank">G-Sport Vlaanderen</a>
+      <a href="https://www.sport.vlaanderen" target="_blank">Sport Vlaanderen</a>
+      <a href="https://www.parantee-psylos.be" target="_blank">Parantee-Psylos</a>
+    </div>
+    <div class="foot-col">
+      <h4>Volg ons</h4>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <span>© 2025 Stad Ieper – BE0207.484.681</span>
+    <span>Privacy &amp; cookiebeleid | Toegankelijkheidsverklaring | Sitemap</span>
+  </div>
+</footer>
+
+<script>
+const clubs = [
+  { name:"Kanoclub De Paddel", sport:"Kano / Kajak", sportKey:"kano", icon:"🛶",
+    tags:["Fysieke beperking","Rolstoel mogelijk"], tc:["t-teal","t-teal"],
+    address:"Dikkebusvijverdreef 29A, Vlamertinge", email:"info@de-paddel.be",
+    website:"https://de-paddel.be", training:"Zaterdag 10:00 – 12:00" },
+  { name:"Zwemclub Ieper – G-Zwemmen", sport:"Zwemmen", sportKey:"zwemmen", icon:"🏊",
+    tags:["Verstandelijke beperking","Fysieke beperking","Autisme"], tc:["t-purple","t-teal","t-amber"],
+    address:"Zwembad De Nachtegaal, Ieper", email:"gzwemmen@zwemclubieper.be",
+    website:"#", training:"Woensdag 17:30 & Zondag 09:00" },
+  { name:"FC Ieper – G-Voetbal", sport:"Voetbal", sportKey:"voetbal", icon:"⚽",
+    tags:["Verstandelijke beperking","Autisme"], tc:["t-purple","t-amber"],
+    address:"Sportpark Ieper-Noord", email:"gvoetbal@fcieper.be",
+    website:"#", training:"Donderdag 18:00 – 19:30" },
+  { name:"Tennis Yper – G-Tennis", sport:"Tennis", sportKey:"tennis", icon:"🎾",
+    tags:["Rolstoel tennis","Fysieke beperking"], tc:["t-teal","t-teal"],
+    address:"Augustijnenstraat 35, Ieper", email:"info@tennisyper.be",
+    website:"#", training:"Vrijdag 16:00 – 18:00" },
+  { name:"Atletiek Ieper – G-Atletiek", sport:"Atletiek", sportKey:"atletiek", icon:"🏃",
+    tags:["Visuele beperking","Fysieke beperking"], tc:["t-amber","t-teal"],
+    address:"Atletiekpiste, Zonnebeekseweg, Ieper", email:"atletiek@ieper.be",
+    website:"#", training:"Dinsdag & Vrijdag 17:00" },
+  { name:"Turnkring Ieper – G-Turnen", sport:"Turnen", sportKey:"turnen", icon:"🤸",
+    tags:["Verstandelijke beperking","Autisme","Psychische kwetsbaarheid"], tc:["t-purple","t-amber","t-red"],
+    address:"Sporthal Ieper-Centrum", email:"gturnen@turnkringieper.be",
+    website:"#", training:"Maandag 18:30 – 20:00" },
+  { name:"WTC Ieper – G-Fietsen", sport:"Wielrennen", sportKey:"wielrennen", icon:"🚴",
+    tags:["Handbike","Fysieke beperking"], tc:["t-teal","t-teal"],
+    address:"Vertrek: Grote Markt, Ieper", email:"gfietsen@wtcieper.be",
+    website:"#", training:"Zondag 09:30 (april – oktober)" },
+  { name:"De Waterdruppels – G-Zwemmen", sport:"Zwemmen", sportKey:"zwemmen", icon:"🏊",
+    tags:["Kinderen & jongeren","Autisme"], tc:["t-amber","t-purple"],
+    address:"Zwembad Ieper, Augustijnenstraat", email:"waterdruppels@ieper.be",
+    website:"#", training:"Zaterdag 10:30 – 12:00" }
+];
+
+let activeFilter = 'all';
+
+function setFilter(key, btn) {
+  activeFilter = key;
+  document.querySelectorAll('.fc').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderClubs();
+}
+
+function renderClubs() {
+  const q = (document.getElementById('search-input').value||'').toLowerCase();
+  const grid = document.getElementById('clubs-grid');
+  const noRes = document.getElementById('no-res');
+  grid.innerHTML = '';
+  let n = 0;
+  clubs.forEach(c => {
+    if (activeFilter !== 'all' && c.sportKey !== activeFilter) return;
+    if (q && !c.name.toLowerCase().includes(q) && !c.sport.toLowerCase().includes(q)) return;
+    n++;
+    const tags = c.tags.map((t,i) => `<span class="tag ${c.tc[i]||'t-teal'}">${t}</span>`).join('');
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = `
+      <div class="card-top">
+        <div class="card-icon">${c.icon}</div>
+        <div><div class="card-name">${c.name}</div><div class="card-sport">${c.sport}</div></div>
+      </div>
+      <div class="card-body">
+        <div class="tags">${tags}</div>
+        <ul class="card-info">
+          <li><span class="ic">📍</span><span>${c.address}</span></li>
+          <li><span class="ic">🕐</span><span>${c.training}</span></li>
+          <li><span class="ic">✉️</span><span>${c.email}</span></li>
+        </ul>
+        <a class="btn-card" href="${c.website}" target="_blank">Meer info over deze club ›</a>
+      </div>`;
+    grid.appendChild(el);
+  });
+  document.getElementById('count-lbl').textContent = n + (n===1?' club':' clubs');
+  noRes.style.display = n===0 ? 'block' : 'none';
+}
+
+renderClubs();
+</script>
+</body>
+</html>
